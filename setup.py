@@ -23,11 +23,11 @@ def get_version() -> str:
 
 setuptools.setup(
     name="linkedin_api",
-    version=get_version(),
-    author="Tom Quirk",
+    version="1",
+    author="Quirk",
     author_email="tomquirkacc@gmail.com",
     description="Python wrapper for the Linkedin API",
-    long_description=get_long_description(),
+    long_description="long_description",
     long_description_content_type="text/markdown",
     url="https://github.com/tomquirk/linkedin-api",
     license="MIT",
