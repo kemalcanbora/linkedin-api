@@ -1,7 +1,8 @@
 import requests
 import pickle
 import logging
-
+from stem.control import Controller
+from stem import Signal
 import linkedin_api.settings as settings
 
 logger = logging.getLogger(__name__)
@@ -49,6 +50,11 @@ class Client(object):
         "Accept-Language": "en-us",
     }
 
+    proxies = {
+        'http': 'socks5://localhost:9050',
+        'https': 'socks5://localhost:9050'
+    }
+
     def __init__(self, debug=False, refresh_cookies=False):
         self.session = requests.session()
         self.session.headers = Client.REQUEST_HEADERS
@@ -71,9 +77,14 @@ class Client(object):
             except FileNotFoundError:
                 self.logger.debug("Cookie file not found. Requesting new cookies.")
 
+        with Controller.from_port(port=9051) as controller:
+            controller.authenticate(password='my password')  # password came from your torrc file
+            controller.signal(Signal.NEWNYM)
+            print("New Tor connection processed")
+
         res = requests.get(
             "{}/uas/authenticate".format(Client.AUTH_BASE_URL),
-            headers=Client.AUTH_REQUEST_HEADERS,
+            headers=Client.AUTH_REQUEST_HEADERS,proxies=Client.proxies
         )
 
         return res.cookies
