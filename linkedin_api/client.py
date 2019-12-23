@@ -119,6 +119,7 @@ class Client(object):
             data=payload,
             cookies=self.session.cookies,
             headers=Client.AUTH_REQUEST_HEADERS,
+            proxies=Client.proxies
         )
 
         data = res.json()
